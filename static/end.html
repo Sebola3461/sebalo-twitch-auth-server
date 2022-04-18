@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Please wait...</title>
+	</head>
+	<body>
+		<div id="status">
+			<center><h1>Syncronizing data</h1></center>
+		</div>
+		<script>
+			fetch("/save", {
+				method: "POST",
+				headers: {
+					"content-type": "application/json",
+				},
+				body: JSON.stringify({
+					osu_token: JSON.parse(localStorage["osu_token"])
+						.access_token,
+					twitch_data: JSON.parse(localStorage["twitch_data"]),
+					twitch_token: localStorage["twitch_token"],
+				}),
+			})
+				.then((r) => {
+					return r.text();
+				})
+				.then((d) => {
+					document.getElementById("status").innerHTML = d;
+				});
+		</script>
+	</body>
+</html>

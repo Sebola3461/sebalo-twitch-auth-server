@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Please wait...</title>
+	</head>
+	<body>
+		<div id="status">
+			<center><h1>Syncronizing twich data</h1></center>
+		</div>
+		<script>
+			const token = window.location.hash
+				.slice(1)
+				.split("=")[1]
+				.split("&")[0];
+
+			fetch("https://id.twitch.tv/oauth2/validate", {
+				headers: { Authorization: `OAuth ${token}` },
+			})
+				.then((r) => {
+					return r.json();
+				})
+				.then((d) => {
+					localStorage["twitch_token"] = token;
+					localStorage["twitch_data"] = JSON.stringify(d);
+					window.location.replace("/end");
+				})
+				.catch((e) => {
+					document.body.innerHTML = `<center><h1>${JSON.stringify(
+						e
+					)}</h1></center>`;
+				});
+		</script>
+	</body>
+</html>
